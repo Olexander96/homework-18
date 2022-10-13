@@ -50,18 +50,29 @@
 // 3) Додавання покупки в список. Враховуй, що при додаванні покупки з уже існуючим в списку продуктом, 
     //необхідно збільшувати кількість в існуючій покупці, а не додавати нову. При цьому також повинна змінитися сума, 
     //наприклад, якщо ціна за одиницю 12, а кількості товарів стало 2, то сума буде 24.
-    function addProduct(name, num, bought, prise) {
+    function addProduct(list, name, num, prise) {
         let total = num * prise;
-        const newProduct = {
+        let newProduct = {
             productName: name, 
             number: num, 
-            isBuy: bought, 
+            isBuy: false, 
             priseForOne: prise, 
-            totalSum: total
+            totalSum: total,
         }
-        productList.push(newProduct);
-        return productList;
+
+        for (let i = 0; i < list.length; i++) {
+            if (name == list[i].productName && prise == list[i].priseForOne) {
+                list[i].number += num;
+                list[i].totalSum += (num * prise);
+                return list;
+            } else {
+                continue
+            }
+        }
+        list.push(newProduct) 
+        return list;
     };
+    
 
 //Максимум
 // 4)Підрахунок суми всіх продуктів (враховуючи кількість кожного) в списку.
@@ -86,17 +97,33 @@
 
 // 6) Показання продуктів в залежності від суми, (від більшого до меншого / від меншого до більшого, в залежності 
     //від параметра функції, який вона приймає)
-    function listFromRrices(array) {
-        array.sort(function(a, b) {
-            if (a.totalSum < b.totalSum) {
-                return 1;
-            } else if (a.totalSum > b.totalSum) {
-                return -1
-            } else {
-                return 0
-            }
-        })
-        return array;
+    function listFromRrices(array, param) {
+        if (param == 'up') {
+            array.sort(function(a, b) {
+                if (a.totalSum < b.totalSum) {
+                    return 1;
+                } else if (a.totalSum > b.totalSum) {
+                    return -1
+                } else {
+                    return 0
+                }
+            })
+            return array;
+        } else if (param == 'down') {
+            array.sort(function(a, b) {
+                if (a.totalSum > b.totalSum) {
+                    return 1;
+                } else if (a.totalSum < b.totalSum) {
+                    return -1
+                } else {
+                    return 0
+                }
+            })
+            return array;
+        } else {
+            return 'Параметр введений невірно!Він повинен бути "up" або "down"';
+        }
+        
     };
 
     // 1.1)
@@ -109,7 +136,9 @@
     // console.log(deleteProduct('potatoe'));
 
     // 3)
-    // console.log(addProduct('apple', 8, true, 2));
+    //console.log(addProduct(productList, 'apple', 8, 2));
+    //console.log(addProduct(productList, 'wine', 3, 7)); //одна ціна за одиницю
+    //console.log(addProduct(productList, 'wine', 3, 9)); //різна ціна за одиницю
 
     // 4)
     // console.log(totalCost(productList));
@@ -118,7 +147,10 @@
     //console.log(totalForNotBought(productList));
 
     // 6)
-    // console.log(listFromRrices(productList));
+    //console.log(listFromRrices(productList, 'up'));
+    //console.log(listFromRrices(productList, 'down'));
+    //console.log(listFromRrices(productList, 'low'));
+    
 
 
 
